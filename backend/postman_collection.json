@@ -1,0 +1,167 @@
+{
+  "info": {
+    "name": "Enterprise Hub API",
+    "_postman_id": "enterprise-hub-collection",
+    "description": "Collection with all endpoints for the Enterprise Hub backend (companies & suppliers). Set variable {{baseUrl}} to your server (default http://localhost:8080).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Companies",
+      "item": [
+        {
+          "name": "Create Company",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentNumber\": \"12.345.678/0001-90\",\n  \"tradeName\": \"Acme LTDA\",\n  \"addressZipCode\": \"01001-000\",\n  \"addressStreet\": \"Av. Paulista\",\n  \"addressNeighborhood\": \"Bela Vista\",\n  \"addressCity\": \"São Paulo\",\n  \"addressState\": \"SP\",\n  \"addressNumber\": \"1000\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/companies",
+              "host": ["{{baseUrl}}"],
+              "path": ["companies"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Companies",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/companies", "host": ["{{baseUrl}}"], "path": ["companies"] }
+          }
+        },
+        {
+          "name": "Get Company by Id",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/companies/:id", "host": ["{{baseUrl}}"], "path": ["companies", ":id"], "variable": [{"key":"id","value":"{companyId}"}] }
+          }
+        },
+        {
+          "name": "Update Company",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentNumber\": \"12.345.678/0001-90\",\n  \"tradeName\": \"Acme LTDA - Updated\",\n  \"addressZipCode\": \"01001-000\",\n  \"addressStreet\": \"Av. Paulista\",\n  \"addressNeighborhood\": \"Bela Vista\",\n  \"addressCity\": \"São Paulo\",\n  \"addressState\": \"SP\",\n  \"addressNumber\": \"1010\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/companies/:id", "host": ["{{baseUrl}}"], "path": ["companies", ":id"], "variable": [{"key":"id","value":"{companyId}"}] }
+          }
+        },
+        {
+          "name": "Delete Company",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/companies/:id", "host": ["{{baseUrl}}"], "path": ["companies", ":id"], "variable": [{"key":"id","value":"{companyId}"}] }
+          }
+        },
+        {
+          "name": "Associate Supplier to Company",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/companies/:companyId/suppliers/:supplierId", "host": ["{{baseUrl}}"], "path": ["companies", ":companyId", "suppliers", ":supplierId"], "variable": [{"key":"companyId","value":"{companyId}"},{"key":"supplierId","value":"{supplierId}"}] }
+          }
+        },
+        {
+          "name": "Dissociate Supplier from Company",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/companies/:companyId/suppliers/:supplierId", "host": ["{{baseUrl}}"], "path": ["companies", ":companyId", "suppliers", ":supplierId"], "variable": [{"key":"companyId","value":"{companyId}"},{"key":"supplierId","value":"{supplierId}"}] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Suppliers",
+      "item": [
+        {
+          "name": "Create Supplier (Pessoa Física)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentNumber\": \"123.456.789-09\",\n  \"documentType\": \"F\",\n  \"name\": \"João Silva\",\n  \"email\": \"joao@example.com\",\n  \"rg\": \"12.345.678-9\",\n  \"birthDate\": \"1990-05-20\",\n  \"addressZipCode\": \"01001-000\",\n  \"addressStreet\": \"Rua Exemplo\",\n  \"addressNeighborhood\": \"Centro\",\n  \"addressCity\": \"São Paulo\",\n  \"addressState\": \"SP\",\n  \"addressNumber\": \"123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/suppliers", "host": ["{{baseUrl}}"], "path": ["suppliers"] }
+          }
+        },
+        {
+          "name": "Create Supplier (Pessoa Jurídica)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentNumber\": \"12.345.678/0001-90\",\n  \"documentType\": \"J\",\n  \"name\": \"Fornecedor LTDA\",\n  \"email\": \"contato@fornecedor.com\",\n  \"addressZipCode\": \"01001-000\",\n  \"addressStreet\": \"Av. Exemplo\",\n  \"addressNeighborhood\": \"Bairro\",\n  \"addressCity\": \"Curitiba\",\n  \"addressState\": \"PR\",\n  \"addressNumber\": \"400\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/suppliers", "host": ["{{baseUrl}}"], "path": ["suppliers"] }
+          }
+        },
+        {
+          "name": "List Suppliers (no filter)",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/suppliers", "host": ["{{baseUrl}}"], "path": ["suppliers"] } }
+        },
+        {
+          "name": "List Suppliers (filter by name)",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/suppliers?nome=joao", "host": ["{{baseUrl}}"], "path": ["suppliers"], "query": [{"key":"nome","value":"joao"}] } }
+        },
+        {
+          "name": "List Suppliers (filter by document)",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/suppliers?documento=12345678909", "host": ["{{baseUrl}}"], "path": ["suppliers"], "query": [{"key":"documento","value":"12345678909"}] } }
+        },
+        {
+          "name": "Get Supplier by Id",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/suppliers/:id", "host": ["{{baseUrl}}"], "path": ["suppliers", ":id"], "variable": [{"key":"id","value":"{supplierId}"}] } }
+        },
+        {
+          "name": "Update Supplier",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"documentNumber\": \"123.456.789-09\",\n  \"documentType\": \"F\",\n  \"name\": \"João Silva Atualizado\",\n  \"email\": \"joao.new@example.com\",\n  \"rg\": \"12.345.678-9\",\n  \"birthDate\": \"1990-05-20\",\n  \"addressZipCode\": \"01001-000\",\n  \"addressStreet\": \"Rua Atualizada\",\n  \"addressNeighborhood\": \"Centro\",\n  \"addressCity\": \"São Paulo\",\n  \"addressState\": \"SP\",\n  \"addressNumber\": \"124\"\n}" },
+            "url": { "raw": "{{baseUrl}}/suppliers/:id", "host": ["{{baseUrl}}"], "path": ["suppliers", ":id"], "variable": [{"key":"id","value":"{supplierId}"}] }
+          }
+        },
+        {
+          "name": "Delete Supplier",
+          "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/suppliers/:id", "host": ["{{baseUrl}}"], "path": ["suppliers", ":id"], "variable": [{"key":"id","value":"{supplierId}"}] } }
+        }
+      ]
+    }
+    ,
+    {
+      "name": "Postal Code",
+      "item": [
+        {
+          "name": "Get Postal Code",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/cep/:cep",
+              "host": ["{{baseUrl}}"],
+              "path": ["cep", ":cep"],
+              "variable": [
+                { "key": "cep", "value": "01001-000" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+
