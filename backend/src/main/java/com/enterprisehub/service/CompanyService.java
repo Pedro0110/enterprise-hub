@@ -2,12 +2,14 @@ package com.enterprisehub.service;
 
 import com.enterprisehub.dto.CompanyRequest;
 import com.enterprisehub.dto.CompanyResponse;
+import com.enterprisehub.dto.SupplierResponse;
 import com.enterprisehub.entity.*;
 import com.enterprisehub.entity.enums.DocumentType;
 import com.enterprisehub.entity.pk.CompanySupplierId;
 import com.enterprisehub.exception.BusinessException;
 import com.enterprisehub.exception.ResourceNotFoundException;
 import com.enterprisehub.mapper.CompanyMapper;
+import com.enterprisehub.mapper.SupplierMapper;
 import com.enterprisehub.repository.CompanyRepository;
 import com.enterprisehub.repository.CompanySupplierRepository;
 import com.enterprisehub.repository.SupplierRepository;
@@ -124,5 +126,15 @@ public class CompanyService {
         }
         companySupplierRepository.deleteById(id);
         log.info("Supplier {} dissociated from company {}", supplierId, companyId);
+    }
+
+    public List<SupplierResponse> getSuppliers(UUID companyId) {
+        log.debug("Getting suppliers for company id={}", companyId);
+        if (!companyRepository.existsById(companyId)) {
+            throw new ResourceNotFoundException("Company not found");
+        }
+        return companySupplierRepository.findByCompany_IdCompany(companyId).stream()
+                .map(cs -> SupplierMapper.toResponse(cs.getSupplier()))
+                .collect(Collectors.toList());
     }
 }

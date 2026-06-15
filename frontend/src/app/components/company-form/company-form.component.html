@@ -1,0 +1,56 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <h2 class="mb-0">{{ editMode ? 'Editar' : 'Nova' }} Empresa</h2>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="mb-3">
+        <label for="documentNumber" class="form-label">CNPJ</label>
+        <input
+          id="documentNumber"
+          type="text"
+          class="form-control"
+          [class.is-invalid]="form.get('documentNumber')?.invalid && form.get('documentNumber')?.touched"
+          formControlName="documentNumber"
+          appCnpjMask
+          placeholder="00.000.000/0000-00"
+          maxlength="18"
+        >
+        <div class="invalid-feedback" *ngIf="form.get('documentNumber')?.invalid && form.get('documentNumber')?.touched">
+          CNPJ inválido (14 dígitos)
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="tradeName" class="form-label">Nome Fantasia</label>
+        <input
+          id="tradeName"
+          type="text"
+          class="form-control"
+          [class.is-invalid]="form.get('tradeName')?.invalid && form.get('tradeName')?.touched"
+          formControlName="tradeName"
+        >
+        <div class="invalid-feedback" *ngIf="form.get('tradeName')?.invalid && form.get('tradeName')?.touched">
+          Nome é obrigatório
+        </div>
+      </div>
+
+      <app-address-input [form]="form"></app-address-input>
+
+      <div class="mt-4 d-flex gap-2">
+        <button
+          type="submit"
+          class="btn btn-success"
+          [disabled]="form.invalid || loading"
+        >
+          <span *ngIf="!loading">Salvar</span>
+          <span *ngIf="loading">
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Salvando...
+          </span>
+        </button>
+        <a routerLink="/companies" class="btn btn-secondary">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>

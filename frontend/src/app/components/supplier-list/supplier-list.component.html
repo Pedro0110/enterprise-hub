@@ -1,0 +1,92 @@
+<h2 class="mb-4">Fornecedores</h2>
+
+<div class="card mb-4 shadow-sm">
+  <div class="card-body">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-4">
+        <label for="filterName" class="form-label">Nome</label>
+        <input
+          id="filterName"
+          type="text"
+          class="form-control"
+          [(ngModel)]="filterName"
+          (keyup.enter)="search()"
+          placeholder="Digite o nome..."
+        >
+      </div>
+      <div class="col-md-4">
+        <label for="filterDocument" class="form-label">CPF/CNPJ</label>
+        <input
+          id="filterDocument"
+          type="text"
+          class="form-control"
+          [(ngModel)]="filterDocument"
+          (keyup.enter)="search()"
+          placeholder="Digite o documento..."
+        >
+      </div>
+      <div class="col-md-4 d-flex gap-2">
+        <button class="btn btn-primary flex-grow-1" (click)="search()">
+          <i class="bi bi-search me-2"></i>Filtrar
+        </button>
+        <button class="btn btn-outline-secondary" (click)="clearFilters()">
+          Limpar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mb-3">
+  <a class="btn btn-success" routerLink="/suppliers/new">
+    <i class="bi bi-plus-lg me-2"></i>Novo Fornecedor
+  </a>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-hover table-striped" *ngIf="!error">
+    <thead class="table-dark">
+      <tr>
+        <th>Documento</th>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Cidade/UF</th>
+        <th>Tipo</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let supplier of suppliers$ | async">
+        <td>{{ supplier.documentNumber | cpfCnpj }}</td>
+        <td>{{ supplier.name }}</td>
+        <td>{{ supplier.email }}</td>
+        <td>{{ supplier.addressCity }}/{{ supplier.addressState }}</td>
+        <td>
+          <span class="badge" [ngClass]="supplier.documentType === 'F' ? 'bg-info' : 'bg-primary'">
+            {{ supplier.documentType === 'F' ? 'Pessoa Física' : 'Pessoa Jurídica' }}
+          </span>
+        </td>
+        <td>
+          <a
+            class="btn btn-sm btn-warning me-2"
+            [routerLink]="['/suppliers', supplier.idSupplier, 'edit']"
+          >
+            Editar
+          </a>
+          <button
+            type="button"
+            class="btn btn-sm btn-danger"
+            (click)="deleteSupplier(supplier.idSupplier!)"
+          >
+            Excluir
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+  {{ error }}
+  <button type="button" class="btn-close" (click)="error = ''" aria-label="Close"></button>
+</div>

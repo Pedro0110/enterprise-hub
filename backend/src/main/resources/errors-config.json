@@ -1,0 +1,291 @@
+{
+  "version": "1.0",
+  "lastUpdate": "2026-06-14",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/companies",
+      "description": "Criar nova empresa",
+      "errors": [
+        {
+          "type": "MethodArgumentNotValidException",
+          "status": 400,
+          "message": "Validação falhou",
+          "cause": "Dados inválidos na requisição (ex: CNPJ inválido, campos obrigatórios faltando)",
+          "responseFormat": "Lista de erros por campo"
+        },
+        {
+          "type": "BusinessException",
+          "status": 409,
+          "message": "CNPJ already registered",
+          "cause": "CNPJ já existe no sistema"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/companies",
+      "description": "Listar todas as empresas",
+      "errors": []
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{id}",
+      "description": "Buscar empresa por ID",
+      "pathParameters": ["id"],
+      "errors": [
+        {
+          "type": "ResourceNotFoundException",
+          "status": 404,
+          "message": "Company not found",
+          "cause": "ID não existe no sistema"
+        }
+      ]
+    },
+    {
+      "method": "PUT",
+      "path": "/companies/{id}",
+      "description": "Atualizar empresa",
+      "pathParameters": ["id"],
+      "errors": [
+        {
+          "type": "MethodArgumentNotValidException",
+          "status": 400,
+          "message": "Validação falhou",
+          "cause": "Dados inválidos na requisição"
+        },
+        {
+          "type": "ResourceNotFoundException",
+          "status": 404,
+          "message": "Company not found",
+          "cause": "ID não existe no sistema"
+        },
+        {
+          "type": "BusinessException",
+          "status": 409,
+          "message": "CNPJ already registered",
+          "cause": "CNPJ já existe em outro registro"
+        }
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/companies/{id}",
+      "description": "Deletar empresa",
+      "pathParameters": ["id"],
+      "errors": [
+        {
+          "type": "ResourceNotFoundException",
+          "status": 404,
+          "message": "Company not found",
+          "cause": "ID não existe no sistema"
+        },
+        {
+          "type": "BusinessException",
+          "status": 409,
+          "message": "Cannot delete company as it has linked suppliers. Remove the links first.",
+          "cause": "Empresa possui fornecedores associados"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/companies/{companyId}/suppliers/{supplierId}",
+      "description": "Associar fornecedor a empresa",
+      "pathParameters": ["companyId", "supplierId"],
+      "errors": [
+        {
+          "type": "ResourceNotFoundException",
+          "status": 404,
+          "message": "Company not found",
+          "cause": "Empresa não encontrada"
+        },
+        {
+          "type": "ResourceNotFoundException",
+          "status": 404,
+          "message": "Supplier not found",
+          "cause": "Fornecedor não encontrado"
+        },
+        {
+          "type": "BusinessException",
+          "status": 422,
+          "message": "Cannot associate underage individual supplier to companies located in Paraná",
+          "cause": "Fornecedor é pessoa física menor de idade e empresa está no PR"
+        }
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/companies/{companyId}/suppliers/{supplierId}",
+      "description": "Desassociar fornecedor de empresa",
+      "pathParameters": ["companyId", "supplierId"],
+      "errors": [
+        {
+          "type": "ResourceNotFoundException",
+          "status": 404,
+          "message": "Association not found",
+          "cause": "Associação entre empresa e fornecedor não existe"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/suppliers",
+      "description": "Criar novo fornecedor",
+      "errors": [
+        {
+          "type": "MethodArgumentNotValidException",
+          "status": 400,
+          "message": "Validação falhou",
+          "cause": "Dados inválidos na requisição (ex: CPF/CNPJ inválido, campos obrigatórios faltando)"
+        },
+        {
+          "type": "BusinessException",
+          "status": 409,
+          "message": "CPF/CNPJ already registered",
+          "cause": "CPF/CNPJ já existe no sistema"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers",
+      "description": "Listar fornecedores (com filtros opcionais)",
+      "queryParameters": [
+        {
+          "name": "nome",
+          "type": "string",
+          "required": false,
+          "description": "Filtrar por nome (case-insensitive)"
+        },
+        {
+          "name": "documento",
+          "type": "string",
+          "required": false,
+          "description": "Filtrar por documento"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers/{id}",
+      "description": "Buscar fornecedor por ID",
+      "pathParameters": ["id"],
+      "errors": [
+        {
+          "type": "ResourceNotFoundException",
+          "status": 404,
+          "message": "Supplier not found",
+          "cause": "ID não existe no sistema"
+        }
+      ]
+    },
+    {
+      "method": "PUT",
+      "path": "/suppliers/{id}",
+      "description": "Atualizar fornecedor",
+      "pathParameters": ["id"],
+      "errors": [
+        {
+          "type": "MethodArgumentNotValidException",
+          "status": 400,
+          "message": "Validação falhou",
+          "cause": "Dados inválidos na requisição"
+        },
+        {
+          "type": "ResourceNotFoundException",
+          "status": 404,
+          "message": "Supplier not found",
+          "cause": "ID não existe no sistema"
+        },
+        {
+          "type": "BusinessException",
+          "status": 409,
+          "message": "CPF/CNPJ already registered",
+          "cause": "CPF/CNPJ já existe em outro registro"
+        }
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/suppliers/{id}",
+      "description": "Deletar fornecedor",
+      "pathParameters": ["id"],
+      "errors": [
+        {
+          "type": "ResourceNotFoundException",
+          "status": 404,
+          "message": "Supplier not found",
+          "cause": "ID não existe no sistema"
+        },
+        {
+          "type": "BusinessException",
+          "status": 409,
+          "message": "Cannot delete supplier as it has linked companies. Remove the links first.",
+          "cause": "Fornecedor está associado a empresas"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/cep/{cep}",
+      "description": "Consultar informações de CEP",
+      "pathParameters": ["cep"],
+      "errors": [
+        {
+          "type": "BusinessException",
+          "status": 404,
+          "message": "Postal code not found",
+          "cause": "CEP não encontrado na base da API externa"
+        },
+        {
+          "type": "BusinessException",
+          "status": 503,
+          "message": "Postal code service unavailable",
+          "cause": "Serviço externo (viaCEP) indisponível ou erro na chamada HTTP"
+        }
+      ]
+    }
+  ],
+  "errorResponseFormat": {
+    "description": "Formato padrão de resposta de erro",
+    "example": {
+      "timestamp": "2026-06-14T10:30:45.123456",
+      "status": 400,
+      "error": "Validation Failed",
+      "message": "Descrição do erro",
+      "errors": [
+        {
+          "field": "documentNumber",
+          "message": "CNPJ inválido"
+        }
+      ]
+    }
+  },
+  "httpStatusCodes": {
+    "200": "OK - Requisição bem-sucedida",
+    "201": "Created - Recurso criado com sucesso",
+    "204": "No Content - Sucesso sem retorno de conteúdo",
+    "400": "Bad Request - Dados inválidos ou validação falhou",
+    "404": "Not Found - Recurso não encontrado",
+    "409": "Conflict - Conflito (ex: documento duplicado)",
+    "422": "Unprocessable Entity - Entidade não pode ser processada (ex: regra de negócio)",
+    "503": "Service Unavailable - Serviço externo indisponível"
+  },
+  "validationRules": {
+    "cpf": {
+      "description": "Validação de CPF (@Cpf)",
+      "pattern": "###.###.###-##",
+      "example": "123.456.789-09",
+      "validation": "Formato e dígitos verificadores"
+    },
+    "cnpj": {
+      "description": "Validação de CNPJ (@Cnpj)",
+      "pattern": "##.###.###/####-##",
+      "example": "12.345.678/0001-90",
+      "validation": "Formato e dígitos verificadores"
+    }
+  }
+}
+

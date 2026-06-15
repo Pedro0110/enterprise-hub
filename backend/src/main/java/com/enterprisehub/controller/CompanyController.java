@@ -2,6 +2,7 @@ package com.enterprisehub.controller;
 
 import com.enterprisehub.dto.CompanyRequest;
 import com.enterprisehub.dto.CompanyResponse;
+import com.enterprisehub.dto.SupplierResponse;
 import com.enterprisehub.service.CompanyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -59,5 +60,10 @@ public class CompanyController {
     public ResponseEntity<Void> dissociateSupplier(@PathVariable UUID companyId, @PathVariable UUID supplierId) {
         companyService.dissociateSupplier(companyId, supplierId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{companyId}/suppliers")
+    public ResponseEntity<List<SupplierResponse>> getSuppliers(@PathVariable UUID companyId) {
+        return ResponseEntity.ok(companyService.getSuppliers(companyId));
     }
 }

@@ -1,0 +1,132 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <h2 class="mb-0">{{ editMode ? 'Editar' : 'Novo' }} Fornecedor</h2>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label [for]="'documentNumber'" class="form-label">
+            {{ form.get('documentType')?.value === 'F' ? 'CPF' : 'CNPJ' }}
+          </label>
+          <ng-container>
+            <input
+              *ngIf="form.get('documentType')?.value === 'F'"
+              id="documentNumber"
+              type="text"
+              class="form-control"
+              [class.is-invalid]="form.get('documentNumber')?.invalid && form.get('documentNumber')?.touched"
+              formControlName="documentNumber"
+              appCpfMask
+              placeholder="000.000.000-00"
+              maxlength="14"
+            >
+            <input
+              *ngIf="form.get('documentType')?.value === 'J'"
+              id="documentNumber"
+              type="text"
+              class="form-control"
+              [class.is-invalid]="form.get('documentNumber')?.invalid && form.get('documentNumber')?.touched"
+              formControlName="documentNumber"
+              appCnpjMask
+              placeholder="00.000.000/0000-00"
+              maxlength="18"
+            >
+          </ng-container>
+          <div class="invalid-feedback d-block" *ngIf="form.get('documentNumber')?.invalid && form.get('documentNumber')?.touched">
+            Documento obrigatório
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="documentType" class="form-label">Tipo</label>
+          <select
+            id="documentType"
+            class="form-select"
+            formControlName="documentType"
+          >
+            <option value="J">Pessoa Jurídica</option>
+            <option value="F">Pessoa Física</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="name" class="form-label">Nome</label>
+          <input
+            id="name"
+            type="text"
+            class="form-control"
+            [class.is-invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+            formControlName="name"
+          >
+          <div class="invalid-feedback d-block" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+            Nome obrigatório
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="email" class="form-label">E-mail</label>
+          <input
+            id="email"
+            type="email"
+            class="form-control"
+            [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+            formControlName="email"
+          >
+          <div class="invalid-feedback d-block" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+            E-mail válido obrigatório
+          </div>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="form.get('documentType')?.value === 'F'">
+        <div class="col-md-6 mb-3">
+          <label for="rg" class="form-label">RG</label>
+          <input
+            id="rg"
+            type="text"
+            class="form-control"
+            [class.is-invalid]="form.get('rg')?.invalid && form.get('rg')?.touched"
+            formControlName="rg"
+          >
+          <div class="invalid-feedback d-block" *ngIf="form.get('rg')?.invalid && form.get('rg')?.touched">
+            RG obrigatório para PF
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="birthDate" class="form-label">Data de Nascimento</label>
+          <input
+            id="birthDate"
+            type="date"
+            class="form-control"
+            [class.is-invalid]="form.get('birthDate')?.invalid && form.get('birthDate')?.touched"
+            formControlName="birthDate"
+          >
+          <div class="invalid-feedback d-block" *ngIf="form.get('birthDate')?.invalid && form.get('birthDate')?.touched">
+            Data obrigatória para PF
+          </div>
+        </div>
+      </div>
+
+      <app-address-input [form]="form"></app-address-input>
+
+      <div class="mt-4 d-flex gap-2">
+        <button
+          type="submit"
+          class="btn btn-success"
+          [disabled]="form.invalid || loading"
+        >
+          <span *ngIf="!loading">Salvar</span>
+          <span *ngIf="loading">
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Salvando...
+          </span>
+        </button>
+        <a routerLink="/suppliers" class="btn btn-secondary">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>

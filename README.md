@@ -1,1 +1,1 @@
-# enterprise-hub
+# Enterprise Hub

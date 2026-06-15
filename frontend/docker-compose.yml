@@ -1,0 +1,15 @@
+services:
+  frontend:
+    image: node:20-alpine
+    container_name: enterprisehub-frontend-dev
+    working_dir: /app
+    volumes:
+      - ./app
+      - /app/node_modules
+    ports:
+      - "4200:4200"
+    command: sh -c "npm install && npm start"
+    networks:
+      - app-net
+    depends_on:
+      - backend

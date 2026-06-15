@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="mb-0">Empresas</h2>
+  <a class="btn btn-primary" routerLink="/companies/new">
+    <i class="bi bi-plus-lg me-2"></i>Nova Empresa
+  </a>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-hover table-striped" *ngIf="!error">
+    <thead class="table-dark">
+      <tr>
+        <th>CNPJ</th>
+        <th>Nome Fantasia</th>
+        <th>Cidade/UF</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let company of companies$ | async">
+        <td>{{ company.documentNumber | cpfCnpj }}</td>
+        <td>{{ company.tradeName }}</td>
+        <td>{{ company.addressCity }}/{{ company.addressState }}</td>
+        <td>
+          <a
+            class="btn btn-sm btn-info me-2"
+            [routerLink]="['/companies', company.idCompany, 'suppliers']"
+          >
+            Fornecedores
+          </a>
+          <a
+            class="btn btn-sm btn-warning me-2"
+            [routerLink]="['/companies', company.idCompany, 'edit']"
+          >
+            Editar
+          </a>
+          <button
+            type="button"
+            class="btn btn-sm btn-danger"
+            (click)="deleteCompany(company.idCompany!)"
+          >
+            Excluir
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+  {{ error }}
+  <button type="button" class="btn-close" (click)="error = ''" aria-label="Close"></button>
+</div>

@@ -1,0 +1,22 @@
+FROM maven:3.9-eclipse-temurin-17-alpine
+
+RUN apk add --update nodejs npm
+
+WORKDIR /app
+
+COPY backend/pom.xml ./backend/
+COPY frontend/package*.json ./frontend/
+
+RUN cd backend && mvn dependency:go-offline -B
+
+RUN cd frontend && npm ci
+
+COPY backend/ ./backend/
+COPY frontend/ ./frontend/
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 4200 8080
+
+ENTRYPOINT ["/entrypoint.sh"]
