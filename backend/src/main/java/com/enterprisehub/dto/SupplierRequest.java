@@ -11,24 +11,24 @@ import java.time.LocalDate;
 @Data
 public class SupplierRequest {
 
-    @NotBlank(message = "Document is required")
+    @NotBlank(message = "Documento é obrigatório")
     @CpfOrCnpj
     private String documentNumber;
 
-    @NotNull(message = "Document type is required")
+    @NotNull(message = "Tipo de documento é obrigatório")
     private DocumentType documentType;
 
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "Nome é obrigatório")
     private String name;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email")
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Email inválido")
     private String email;
 
     private String rg;
     private LocalDate birthDate;
 
-    @NotBlank(message = "Postal code is required")
+    @NotBlank(message = "CEP é obrigatório")
     private String addressZipCode;
     private String addressStreet;
     private String addressNeighborhood;
@@ -36,7 +36,7 @@ public class SupplierRequest {
     private String addressState;
     private String addressNumber;
 
-    @AssertTrue(message = "Individual suppliers must provide RG and birth date")
+    @AssertTrue(message = "Fornecedores PF devem fornecer RG e data de nascimento")
     public boolean isPfValid() {
         if (documentType == DocumentType.F) {
             return rg != null && !rg.isBlank() && birthDate != null;
@@ -44,7 +44,7 @@ public class SupplierRequest {
         return true;
     }
 
-    @AssertTrue(message = "Invalid document for type: CPF must have 11 digits and be valid; CNPJ must have 14 digits and be valid")
+    @AssertTrue(message = "Documento inválido para o tipo: CPF deve ter 11 dígitos e ser válido; CNPJ deve ter 14 dígitos e ser válido")
     public boolean isDocumentValidForType() {
         if (documentType == null || documentNumber == null) {
             return true;

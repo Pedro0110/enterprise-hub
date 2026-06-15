@@ -62,7 +62,6 @@ import { Toast } from '../../models/toast.model';
       }
     }
   `],
-  standalone: true,
   imports: [
     CommonModule,
     NgbAlertModule,

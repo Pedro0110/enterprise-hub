@@ -32,7 +32,7 @@ public class SupplierService {
         log.info("Creating supplier (document={})", request.getDocumentNumber());
 
         if (supplierRepository.existsByDocumentNumber(request.getDocumentNumber())) {
-            throw new BusinessException("CPF/CNPJ already registered", HttpStatus.CONFLICT);
+            throw new BusinessException("CPF/CNPJ já cadastrado", HttpStatus.CONFLICT);
         }
 
         Supplier entity = SupplierMapper.toEntity(request);
@@ -74,7 +74,7 @@ public class SupplierService {
             updated = supplierRepository.saveAndFlush(updated);
             log.info("Supplier updated id={}", updated.getIdSupplier());
         } catch (DataIntegrityViolationException e) {
-            throw new BusinessException("CPF/CNPJ already registered", HttpStatus.CONFLICT);
+            throw new BusinessException("CPF/CNPJ já cadastrado", HttpStatus.CONFLICT);
         }
         return SupplierMapper.toResponse(updated);
     }
@@ -83,11 +83,11 @@ public class SupplierService {
     public void delete(UUID id) {
         log.info("Deleting supplier id={}", id);
         if (!supplierRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Supplier not found");
+            throw new ResourceNotFoundException("Fornecedor não encontrado");
         }
         if (companySupplierRepository.existsBySupplier_IdSupplier(id)) {
             throw new BusinessException(
-                    "Cannot delete supplier as it has linked companies. Remove the links first.",
+                    "Não é possível deletar fornecedor com empresas vinculadas. Remova as associações primeiro.",
                     HttpStatus.CONFLICT
             );
         }

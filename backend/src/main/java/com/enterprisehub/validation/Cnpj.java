@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Cnpj {
-    String message() default "Invalid CNPJ";
+    String message() default "CNPJ inválido";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

@@ -16,3 +16,5 @@ export const routes: Routes = [
   { path: 'suppliers/:id/edit', component: SupplierFormComponent }
 ];
 
+export class AppRoutingModule {
+}

@@ -30,10 +30,10 @@ public class CepService {
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 return response.getBody();
             }
-            throw new BusinessException("Postal code not found", HttpStatus.NOT_FOUND);
+            throw new BusinessException("CEP não encontrado", HttpStatus.NOT_FOUND);
         } catch (RestClientException e) {
             log.error("Error consulting postal code service for {}: {}", normalized, e.getMessage());
-            throw new BusinessException("Postal code service unavailable", HttpStatus.SERVICE_UNAVAILABLE);
+            throw new BusinessException("Serviço de consulta de CEP indisponível", HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 

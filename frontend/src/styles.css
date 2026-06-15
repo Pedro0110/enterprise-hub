@@ -1,1 +1,603 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Bootstrap Icons are loaded via angular.json styles or CDN in index.html */
+
+/* ==================== TYPOGRAPHY AND GLOBAL STYLES ==================== */
+:root {
+  /* Font Family */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Poppins', 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* Typography Scale */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+
+  /* Line Height */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  --line-height-loose: 2;
+
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.01em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.025em;
+
+  /* Colors */
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+  --color-border: #e5e7eb;
+  --color-bg-light: #f9fafb;
+}
+
+/* Global Body Styles */
+body {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  background-color: #ffffff;
+  letter-spacing: var(--letter-spacing-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings - Display Font (Poppins) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: 800;
+  color: #111827;
+}
+
+h2 {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+}
+
+h3 {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+}
+
+h4 {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+}
+
+h5 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+h6 {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* Paragraph and Text */
+p {
+  margin-bottom: 1rem;
+  line-height: var(--line-height-relaxed);
+}
+
+small,
+.small {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+}
+
+strong,
+.font-weight-bold {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+a {
+  color: #0066cc;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #0052a3;
+  text-decoration: underline;
+}
+
+/* Lists */
+ul, ol {
+  margin-bottom: 1rem;
+  line-height: var(--line-height-relaxed);
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+/* Code */
+code,
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  background-color: var(--color-bg-light);
+  border-radius: 0.375rem;
+}
+
+code {
+  padding: 0.2em 0.4em;
+  color: #d73a49;
+}
+
+pre {
+  padding: 1rem;
+  overflow-x: auto;
+  line-height: var(--line-height-normal);
+  margin-bottom: 1rem;
+}
+
+pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+/* Bootstrap Override for Typography */
+.navbar-brand {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.nav-link {
+  font-weight: 500;
+  font-size: var(--font-size-base);
+  color: #6b7280 !important;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #ffffff !important;
+}
+
+/* Card Typography */
+.card-title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.card-text {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-secondary);
+}
+
+/* Button Typography */
+.btn {
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  letter-spacing: var(--letter-spacing-normal);
+  transition: all 0.2s ease;
+  border-radius: 0.375rem;
+}
+
+.btn-sm {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  padding: 0.375rem 0.75rem;
+}
+
+.btn-lg {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  padding: 0.625rem 1.5rem;
+}
+
+/* Badge Typography */
+.badge {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.25rem;
+}
+
+/* Table Typography */
+.table {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  border-color: var(--color-border);
+}
+
+.table th {
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-light);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.table td {
+  color: var(--color-text-secondary);
+  padding: 0.875rem;
+}
+
+/* Form Labels and Inputs */
+.form-label {
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.form-control,
+.form-select {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  border-radius: 0.375rem;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.form-control::placeholder {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+/* Alert Typography */
+.alert {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  border-radius: 0.375rem;
+}
+
+.alert-title {
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* ==================== RESPONSIVE TABLES FOR MOBILE ==================== */
+@media (max-width: 768px) {
+  /* Hide table-responsive div borders and allow full-width table */
+  .table-responsive {
+    border: none !important;
+  }
+
+  /* Table becomes block layout */
+  .table-mobile,
+  .table-mobile thead,
+  .table-mobile tbody,
+  .table-mobile th,
+  .table-mobile tr,
+  .table-mobile td {
+    display: block;
+    width: 100%;
+  }
+
+  /* Hide table headers */
+  .table-mobile thead {
+    display: none;
+  }
+
+  /* Style each row like a card */
+  .table-mobile tr {
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    margin-bottom: 1rem;
+    padding: 0;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+
+  /* Stack cells vertically with labels */
+  .table-mobile td {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    align-items: start;
+  }
+
+  /* Add label from data attribute */
+  .table-mobile td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #495057;
+    word-break: break-word;
+    font-size: 0.9rem;
+  }
+
+  /* Last cell in row - full width (actions) */
+  .table-mobile tr > td:last-child {
+    display: block;
+    grid-template-columns: none;
+    border-bottom: none;
+    padding: 0.75rem 1rem;
+  }
+
+  .table-mobile tr > td:last-child::before {
+    content: '';
+    display: none;
+  }
+
+  /* Buttons in action cell - stack or flex */
+  .table-mobile .btn-group,
+  .table-mobile td:last-child .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    margin-right: 0 !important;
+  }
+
+  /* Badge styling on mobile */
+  .table-mobile .badge {
+    display: inline-block;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  /* Empty message */
+  .table-mobile tbody tr:only-child td {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+}
+
+/* ==================== MOBILE BUTTON IMPROVEMENTS ==================== */
+@media (max-width: 576px) {
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .btn {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Stack multiple action buttons vertically */
+  .table-mobile td:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .table-mobile td:last-child .btn {
+    width: 100%;
+  }
+}
+
+/* ==================== RESPONSIVE TYPOGRAPHY ==================== */
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.625rem;
+  }
+
+  h3 {
+    font-size: 1.375rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Improve readability on tablets */
+  body {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.875rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  h4, h5 {
+    font-size: 1rem;
+    margin-bottom: 0.625rem;
+  }
+
+  p {
+    line-height: 1.65;
+    margin-bottom: 1rem;
+  }
+
+  .form-label {
+    font-size: 0.95rem;
+  }
+
+  .form-control,
+  .form-select {
+    font-size: 1rem;
+    padding: 0.625rem 0.875rem;
+  }
+
+  .btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.95rem;
+    min-height: 44px;
+  }
+
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+
+  .nav-link {
+    font-size: 0.95rem;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  .card-text {
+    font-size: 0.95rem;
+  }
+
+  .alert {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Extra small devices - optimize for readability */
+  body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  h4, h5, h6 {
+    font-size: 1rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin-bottom: 0.875rem;
+  }
+
+  small,
+  .small {
+    font-size: 0.85rem;
+  }
+
+  .form-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .form-control,
+  .form-select {
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+  }
+
+  .btn {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.9rem;
+    min-height: 44px;
+    border-radius: 0.25rem;
+  }
+
+  .btn-sm {
+    font-size: 0.8rem;
+    padding: 0.325rem 0.688rem;
+  }
+
+  .btn-lg {
+    font-size: 0.95rem;
+    padding: 0.625rem 1rem;
+  }
+
+  .navbar {
+    padding: 0.75rem 0;
+  }
+
+  .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .nav-link {
+    font-size: 0.9rem;
+  }
+
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .table {
+    font-size: 0.9rem;
+  }
+
+  .table th {
+    font-size: 0.8rem;
+    padding: 0.625rem;
+  }
+
+  .table td {
+    padding: 0.625rem;
+    color: var(--color-text-secondary);
+  }
+
+  .card {
+    border-radius: 0.375rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-text {
+    font-size: 0.9rem;
+  }
+
+  .alert {
+    font-size: 0.9rem;
+    padding: 0.875rem;
+    border-radius: 0.25rem;
+  }
+}

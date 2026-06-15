@@ -1,9 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CompanyService } from '../../services/company.service';
 import { Company } from '../../models/company';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ToastService } from '../../shared/services/toast.service';
 import { ConfirmDialogService } from '../../shared/services/confirm-dialog.service';
 import { CpfCnpjPipe } from '../../shared/pipes/cpf-cnpj.pipe';
@@ -20,13 +20,15 @@ import { CpfCnpjPipe } from '../../shared/pipes/cpf-cnpj.pipe';
   ]
 })
 export class CompanyListComponent implements OnInit {
-  companies$!: Observable<Company[]>;
+  private companiesSubject = new BehaviorSubject<Company[]>([]);
+  companies$ = this.companiesSubject.asObservable();
   error = '';
 
   constructor(
     private companyService: CompanyService,
     private toastService: ToastService,
-    private confirmDialog: ConfirmDialogService
+    private confirmDialog: ConfirmDialogService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +36,17 @@ export class CompanyListComponent implements OnInit {
   }
 
   loadCompanies(): void {
-    this.companies$ = this.companyService.list();
+    this.companyService.list().subscribe({
+      next: (companies) => {
+        console.log('loadCompanies: received', companies.length);
+        this.companiesSubject.next(companies);
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('loadCompanies erro', err);
+        this.error = 'Erro ao carregar empresas';
+      }
+    });
   }
 
   deleteCompany(id: string): void {
@@ -43,12 +55,24 @@ export class CompanyListComponent implements OnInit {
       'Tem certeza que deseja excluir esta empresa?'
     ).subscribe((confirmed) => {
       if (confirmed) {
+        console.error('deleteCompany: deleting', id);
+        const prev = this.companiesSubject.value;
+        const updated = prev.filter(c => c.idCompany !== id);
+        console.info('deleteCompany: optimistic remove', id, 'prevCount=', prev.length, 'newCount=', updated.length);
+        this.companiesSubject.next(updated);
+        this.cdr.markForCheck();
+
         this.companyService.delete(id).subscribe({
           next: () => {
             this.toastService.success('Empresa excluída com sucesso');
             this.loadCompanies();
           },
-          error: (err) => this.toastService.error(err.error?.message || 'Erro ao excluir empresa')
+          error: (err) => {
+            console.error('deleteCompany erro', err);
+            this.companiesSubject.next(prev);
+            this.cdr.markForCheck();
+            this.toastService.error(err.error?.message || 'Erro ao excluir empresa');
+          }
         });
       }
     });

@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { CompanyListComponent } from './components/company-list/company-list.component';
@@ -28,38 +27,36 @@ import { ConfirmDialogComponent } from './shared/services/confirm-dialog.service
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ConfirmDialogComponent,
-    ToastContainerComponent,
-    CompanyListComponent,
-    CompanyFormComponent,
-    SupplierListComponent,
-    SupplierFormComponent,
-    CompanySuppliersComponent,
-    AddressInputComponent,
-    SpinnerComponent,
-    CpfCnpjPipe,
-    CepPipe,
-    DateFormatPipe,
-    CpfCnpjMaskDirective,
-    CepMaskDirective,
-    CnpjMaskDirective,
-    CpfMaskDirective
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
     CommonModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
     NgbModule,
-    NgbAlertModule
+    NgbAlertModule,
+    AppComponent,
+    ToastContainerComponent,
+    CompanyListComponent,
+    SupplierListComponent,
+    SupplierFormComponent,
+    CompanySuppliersComponent,
+    SpinnerComponent,
+    AddressInputComponent,
+    CpfCnpjPipe,
+    CepPipe,
+    DateFormatPipe,
+    CpfCnpjMaskDirective,
+    CepMaskDirective,
+    CompanyFormComponent,
+    CpfMaskDirective,
+    CnpjMaskDirective
   ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
-  ],
-  bootstrap: [AppComponent]
+   providers: [
+     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
+   ],
 })
 export class AppModule { }

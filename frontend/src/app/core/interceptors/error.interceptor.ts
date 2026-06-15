@@ -20,6 +20,9 @@ export class ErrorInterceptor implements HttpInterceptor {
   private handleError(error: HttpErrorResponse): void {
     let message = 'Erro ao processar a requisição';
 
+    // Always log full error to console for debugging
+    console.error(`[HTTP Error ${error.status}] ${error.url}`, error);
+
     if (error.status === 400) {
       // Validação falha
       message = error.error?.message || 'Validação falhou. Verifique os dados informados.';
@@ -62,11 +65,16 @@ export class ErrorInterceptor implements HttpInterceptor {
         message = 'Serviço indisponível no momento. Tente novamente mais tarde.';
       }
     } else if (error.status === 0) {
-      message = 'Erro de conectividade. Verifique sua conexão com a internet.';
+      message = 'Erro de conectividade. Verifique se o backend está rodando em http://localhost:8080';
     } else if (error.status >= 500) {
-      message = 'Erro interno do servidor. Tente novamente mais tarde.';
+      // Server error - show detailed message if available
+      const serverMessage = error.error?.message || error.error?.error || error.statusText;
+      message = serverMessage
+        ? `Erro no servidor: ${serverMessage}`
+        : 'Erro interno do servidor (500). Verifique os logs do backend.';
     }
 
+    console.error('Error message to user:', message);
     this.toastService.error(message);
   }
 }

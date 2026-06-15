@@ -6,7 +6,7 @@
 </div>
 
 <div class="table-responsive">
-  <table class="table table-hover table-striped" *ngIf="!error">
+  <table class="table table-hover table-striped table-mobile" *ngIf="!error">
     <thead class="table-dark">
       <tr>
         <th>CNPJ</th>
@@ -17,22 +17,22 @@
     </thead>
     <tbody>
       <tr *ngFor="let company of companies$ | async">
-        <td>{{ company.documentNumber | cpfCnpj }}</td>
-        <td>{{ company.tradeName }}</td>
-        <td>{{ company.addressCity }}/{{ company.addressState }}</td>
-        <td>
-          <a
-            class="btn btn-sm btn-info me-2"
+        <td data-label="CNPJ">{{ company.documentNumber | cpfCnpj }}</td>
+        <td data-label="Nome Fantasia">{{ company.tradeName }}</td>
+        <td data-label="Cidade/UF">{{ company.addressCity }}/{{ company.addressState }}</td>
+        <td data-label="Ações">
+          <button
+            class="btn btn-sm btn-outline-dark me-2"
             [routerLink]="['/companies', company.idCompany, 'suppliers']"
           >
             Fornecedores
-          </a>
-          <a
+          </button>
+          <button
             class="btn btn-sm btn-warning me-2"
             [routerLink]="['/companies', company.idCompany, 'edit']"
           >
             Editar
-          </a>
+          </button>
           <button
             type="button"
             class="btn btn-sm btn-danger"

@@ -40,7 +40,7 @@ public class CompanyService {
         log.info("Creating company (document={})", request.getDocumentNumber());
 
         if (companyRepository.existsByDocumentNumber(request.getDocumentNumber())) {
-            throw new BusinessException("CNPJ already registered", HttpStatus.CONFLICT);
+            throw new BusinessException("CNPJ já cadastrado", HttpStatus.CONFLICT);
         }
 
         Company entity = CompanyMapper.toEntity(request, null);
@@ -57,23 +57,22 @@ public class CompanyService {
 
     public CompanyResponse findById(UUID id) {
         Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
         return CompanyMapper.toResponse(company);
     }
 
     @Transactional
     public CompanyResponse update(UUID id, CompanyRequest request) {
         log.info("Updating company id={}", id);
-        Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+         Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
         Company updated = CompanyMapper.toEntity(request, null);
         updated.setIdCompany(company.getIdCompany());
         try {
-            // persist changes now to catch constraint violations early
             updated = companyRepository.saveAndFlush(updated);
             log.info("Company updated id={}", updated.getIdCompany());
         } catch (DataIntegrityViolationException e) {
-            throw new BusinessException("CNPJ already registered", HttpStatus.CONFLICT);
+            throw new BusinessException("CNPJ já cadastrado", HttpStatus.CONFLICT);
         }
         return CompanyMapper.toResponse(updated);
     }
@@ -82,11 +81,11 @@ public class CompanyService {
     public void delete(UUID id) {
         log.info("Deleting company id={}", id);
         if (!companyRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Company not found");
+            throw new ResourceNotFoundException("Empresa não encontrada");
         }
         if (companySupplierRepository.existsByCompany_IdCompany(id)) {
             throw new BusinessException(
-                    "Cannot delete company as it has linked suppliers. Remove the links first.",
+                    "Não é possível deletar empresa com fornecedores vinculados. Remova as associações primeiro.",
                     HttpStatus.CONFLICT
             );
         }
@@ -98,16 +97,16 @@ public class CompanyService {
     public void associateSupplier(UUID companyId, UUID supplierId) {
         log.info("Associating supplier {} to company {}", supplierId, companyId);
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
         Supplier supplier = supplierRepository.findById(supplierId)
-                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Fornecedor não encontrado"));
 
         if ("PR".equalsIgnoreCase(company.getAddress().getState()) &&
                 supplier.getDocumentType() == DocumentType.F &&
                 supplier.getBirthDate() != null &&
                 Period.between(supplier.getBirthDate(), LocalDate.now()).getYears() < 18) {
             throw new BusinessException(
-                    "Cannot associate underage individual supplier to companies located in Paraná",
+                    "Não é possível associar fornecedor PF menor de idade a empresas localizadas no Paraná",
                     HttpStatus.UNPROCESSABLE_CONTENT
             );
         }
@@ -122,7 +121,7 @@ public class CompanyService {
         log.info("Dissociating supplier {} from company {}", supplierId, companyId);
         CompanySupplierId id = new CompanySupplierId(companyId, supplierId);
         if (!companySupplierRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Association not found");
+            throw new ResourceNotFoundException("Associação não encontrada");
         }
         companySupplierRepository.deleteById(id);
         log.info("Supplier {} dissociated from company {}", supplierId, companyId);
@@ -131,7 +130,7 @@ public class CompanyService {
     public List<SupplierResponse> getSuppliers(UUID companyId) {
         log.debug("Getting suppliers for company id={}", companyId);
         if (!companyRepository.existsById(companyId)) {
-            throw new ResourceNotFoundException("Company not found");
+            throw new ResourceNotFoundException("Empresa não encontrada");
         }
         return companySupplierRepository.findByCompany_IdCompany(companyId).stream()
                 .map(cs -> SupplierMapper.toResponse(cs.getSupplier()))

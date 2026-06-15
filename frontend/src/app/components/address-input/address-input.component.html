@@ -9,8 +9,12 @@
           <input
             id="addressZipCode"
             type="text"
+            inputmode="numeric"
+            autocomplete="postal-code"
             class="form-control"
             [class.is-invalid]="form.get('addressZipCode')?.invalid && form.get('addressZipCode')?.touched"
+            [attr.aria-invalid]="form.get('addressZipCode')?.invalid && form.get('addressZipCode')?.touched"
+            aria-describedby="addressZipCodeError"
             formControlName="addressZipCode"
             appCepMask
             (blur)="buscarCep()"
@@ -20,12 +24,23 @@
             class="btn btn-outline-primary"
             type="button"
             (click)="buscarCep()"
+            [disabled]="loadingCep || (form.get('addressZipCode')?.invalid ?? false)"
           >
-            Buscar
+            <span *ngIf="!loadingCep">Buscar</span>
+            <span *ngIf="loadingCep">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span class="visually-hidden">Buscando...</span>
+            </span>
           </button>
         </div>
-        <div class="invalid-feedback d-block" *ngIf="form.get('addressZipCode')?.invalid && form.get('addressZipCode')?.touched">
-          CEP obrigatório (8 dígitos)
+        <div
+          id="addressZipCodeError"
+          class="invalid-feedback d-block"
+          role="alert"
+          *ngIf="form.get('addressZipCode')?.touched && form.get('addressZipCode')?.errors as errors"
+        >
+          <span *ngIf="errors['notFound']; else cepRequired">CEP não encontrado</span>
+          <ng-template #cepRequired>CEP obrigatório (8 dígitos)</ng-template>
         </div>
       </div>
 
@@ -34,6 +49,7 @@
         <input
           id="addressStreet"
           type="text"
+          autocomplete="address-line1"
           class="form-control"
           formControlName="addressStreet"
           placeholder="Rua, Avenida, etc."
@@ -45,6 +61,8 @@
         <input
           id="addressNumber"
           type="text"
+          inputmode="numeric"
+          autocomplete="address-line2"
           class="form-control"
           formControlName="addressNumber"
         >
@@ -57,6 +75,7 @@
         <input
           id="addressNeighborhood"
           type="text"
+          autocomplete="address-level3"
           class="form-control"
           formControlName="addressNeighborhood"
         >
@@ -67,6 +86,7 @@
         <input
           id="addressCity"
           type="text"
+          autocomplete="address-level2"
           class="form-control"
           formControlName="addressCity"
         >
@@ -74,13 +94,18 @@
 
       <div class="col-md-4 mb-3">
         <label for="addressState" class="form-label">UF</label>
-        <input
+        <select
           id="addressState"
-          type="text"
-          class="form-control"
+          autocomplete="address-level1"
+          class="form-select"
           formControlName="addressState"
-          maxlength="2"
+          [compareWith]="compareState"
         >
+          <option value="">Selecione...</option>
+          <option *ngFor="let state of brazilianStates" [value]="state.code">
+            {{ state.code }} - {{ state.name }}
+          </option>
+        </select>
       </div>
     </div>
   </div>

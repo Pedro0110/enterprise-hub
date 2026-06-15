@@ -8,14 +8,14 @@ import lombok.Data;
 @Data
 public class CompanyRequest {
 
-    @NotBlank(message = "CNPJ is required")
+    @NotBlank(message = "CNPJ é obrigatório")
     @Cnpj
     private String documentNumber;
 
-    @NotBlank(message = "Trade name is required")
+    @NotBlank(message = "Razão social é obrigatória")
     private String tradeName;
 
-    @NotBlank(message = "Postal code is required")
+    @NotBlank(message = "CEP é obrigatório")
     @Size(min = 8, max = 9)
     private String addressZipCode;
 

@@ -1,9 +1,16 @@
-<div *ngIf="company" class="container-fluid">
+<div class="container-fluid">
+  <!-- use global spinner (app-spinner) and LoadingService observable from component -->
+  <div *ngIf="allDataLoaded && !company" class="alert alert-warning" role="alert">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    Empresa não encontrada.
+    <a routerLink="/companies" class="alert-link">Voltar para a lista</a>
+  </div>
+  <ng-container *ngIf="company">
   <div class="mb-4">
-    <h2>Fornecedores de {{ company.tradeName }}</h2>
+    <h2>Fornecedores de {{ company!.tradeName }}</h2>
     <p class="text-muted">
-      <strong>CNPJ:</strong> {{ company.documentNumber | cpfCnpj }} —
-      <strong>Localização:</strong> {{ company.addressCity }}/{{ company.addressState }}
+      <strong>CNPJ:</strong> {{ company!.documentNumber | cpfCnpj }} —
+      <strong>Localização:</strong> {{ company!.addressCity }}/{{ company!.addressState }}
     </p>
   </div>
 
@@ -15,7 +22,7 @@
         </div>
         <div class="card-body">
           <div class="table-responsive">
-            <table class="table table-striped" *ngIf="linkedSuppliers.length > 0; else noLinked">
+            <table class="table table-striped table-mobile" *ngIf="linkedSuppliers.length > 0; else noLinked">
               <thead class="table-light">
                 <tr>
                   <th>Nome</th>
@@ -25,9 +32,9 @@
               </thead>
               <tbody>
                 <tr *ngFor="let supplier of linkedSuppliers">
-                  <td>{{ supplier.name }}</td>
-                  <td>{{ supplier.documentNumber | cpfCnpj }}</td>
-                  <td>
+                  <td data-label="Nome">{{ supplier.name }}</td>
+                  <td data-label="Documento">{{ supplier.documentNumber | cpfCnpj }}</td>
+                  <td data-label="Ação">
                     <button
                       type="button"
                       class="btn btn-sm btn-danger"
@@ -65,9 +72,12 @@
                 id="supplierSelect"
                 class="form-select"
                 [(ngModel)]="selectedSupplierId"
+                [disabled]="availableSuppliers.length === 0"
               >
-                <option [ngValue]="null" disabled>Selecione um fornecedor</option>
-                <option *ngFor="let supplier of allSuppliers" [ngValue]="supplier.idSupplier">
+                <option [ngValue]="null" disabled>
+                  {{ availableSuppliers.length === 0 ? 'Todos os fornecedores estão vinculados' : 'Selecione um fornecedor' }}
+                </option>
+                <option *ngFor="let supplier of availableSuppliers" [ngValue]="supplier.idSupplier">
                   {{ supplier.name }} ({{ supplier.documentNumber | cpfCnpj }})
                 </option>
               </select>
@@ -76,7 +86,7 @@
               <button
                 type="button"
                 class="btn btn-primary w-100"
-                [disabled]="!selectedSupplierId"
+                [disabled]="!selectedSupplierId || availableSuppliers.length === 0"
                 (click)="associate()"
               >
                 <i class="bi bi-plus-lg me-2"></i>Vincular
@@ -91,4 +101,5 @@
   <a routerLink="/companies" class="btn btn-secondary">
     <i class="bi bi-arrow-left me-2"></i>Voltar
   </a>
+  </ng-container>
 </div>

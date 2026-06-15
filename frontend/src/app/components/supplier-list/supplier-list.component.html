@@ -44,7 +44,7 @@
 </div>
 
 <div class="table-responsive">
-  <table class="table table-hover table-striped" *ngIf="!error">
+  <table class="table table-hover table-striped table-mobile" *ngIf="!error">
     <thead class="table-dark">
       <tr>
         <th>Documento</th>
@@ -57,16 +57,16 @@
     </thead>
     <tbody>
       <tr *ngFor="let supplier of suppliers$ | async">
-        <td>{{ supplier.documentNumber | cpfCnpj }}</td>
-        <td>{{ supplier.name }}</td>
-        <td>{{ supplier.email }}</td>
-        <td>{{ supplier.addressCity }}/{{ supplier.addressState }}</td>
-        <td>
+        <td data-label="Documento">{{ supplier.documentNumber | cpfCnpj }}</td>
+        <td data-label="Nome">{{ supplier.name }}</td>
+        <td data-label="E-mail">{{ supplier.email }}</td>
+        <td data-label="Cidade/UF">{{ supplier.addressCity }}/{{ supplier.addressState }}</td>
+        <td data-label="Tipo">
           <span class="badge" [ngClass]="supplier.documentType === 'F' ? 'bg-info' : 'bg-primary'">
             {{ supplier.documentType === 'F' ? 'Pessoa Física' : 'Pessoa Jurídica' }}
           </span>
         </td>
-        <td>
+        <td data-label="Ações">
           <a
             class="btn btn-sm btn-warning me-2"
             [routerLink]="['/suppliers', supplier.idSupplier, 'edit']"
