@@ -48,6 +48,12 @@ A estrutura do banco foi modelada conforme o diagrama abaixo:
 
 ---
 
+## Collection para o postman
+
+Todos os enpoints estão nessa collection: [postman_collection](backend/postman_collection.json)
+
+---
+
 ## Decisões Técnicas
 
 Durante o desenvolvimento, algumas decisões arquiteturais e de implementação foram tomadas com base no escopo do projeto
