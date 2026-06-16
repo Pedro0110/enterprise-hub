@@ -12,81 +12,87 @@
           [(ngModel)]="filterName"
           (keyup.enter)="search()"
           placeholder="Digite o nome..."
-        >
-      </div>
-      <div class="col-md-4">
-        <label for="filterDocument" class="form-label">CPF/CNPJ</label>
-        <input
-          id="filterDocument"
-          type="text"
-          class="form-control"
-          [(ngModel)]="filterDocument"
-          (keyup.enter)="search()"
-          placeholder="Digite o documento..."
-        >
-      </div>
-      <div class="col-md-4 d-flex gap-2">
-        <button class="btn btn-primary flex-grow-1" (click)="search()">
-          <i class="bi bi-search me-2"></i>Filtrar
-        </button>
-        <button class="btn btn-outline-secondary" (click)="clearFilters()">
-          Limpar
-        </button>
+          >
+        </div>
+        <div class="col-md-4">
+          <label for="filterDocument" class="form-label">CPF/CNPJ</label>
+          <input
+            id="filterDocument"
+            type="text"
+            class="form-control"
+            [(ngModel)]="filterDocument"
+            (keyup.enter)="search()"
+            placeholder="Digite o documento..."
+            >
+          </div>
+          <div class="col-md-4 d-flex gap-2">
+            <button class="btn btn-primary flex-grow-1" (click)="search()">
+              <i class="bi bi-search me-2"></i>Filtrar
+            </button>
+            <button class="btn btn-outline-secondary" (click)="clearFilters()">
+              Limpar
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="mb-3">
-  <a class="btn btn-success" routerLink="/suppliers/new">
-    <i class="bi bi-plus-lg me-2"></i>Novo Fornecedor
-  </a>
-</div>
+    <div class="mb-3">
+      <button class="btn btn-success" routerLink="/suppliers/new">
+        <i class="bi bi-plus-lg me-2"></i>Novo Fornecedor
+      </button>
+    </div>
 
-<div class="table-responsive">
-  <table class="table table-hover table-striped table-mobile" *ngIf="!error">
-    <thead class="table-dark">
-      <tr>
-        <th>Documento</th>
-        <th>Nome</th>
-        <th>E-mail</th>
-        <th>Cidade/UF</th>
-        <th>Tipo</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let supplier of suppliers$ | async">
-        <td data-label="Documento">{{ supplier.documentNumber | cpfCnpj }}</td>
-        <td data-label="Nome">{{ supplier.name }}</td>
-        <td data-label="E-mail">{{ supplier.email }}</td>
-        <td data-label="Cidade/UF">{{ supplier.addressCity }}/{{ supplier.addressState }}</td>
-        <td data-label="Tipo">
-          <span class="badge" [ngClass]="supplier.documentType === 'F' ? 'bg-info' : 'bg-primary'">
-            {{ supplier.documentType === 'F' ? 'Pessoa Física' : 'Pessoa Jurídica' }}
-          </span>
-        </td>
-        <td data-label="Ações">
-          <a
-            class="btn btn-sm btn-warning me-2"
-            [routerLink]="['/suppliers', supplier.idSupplier, 'edit']"
-          >
-            Editar
-          </a>
-          <button
-            type="button"
-            class="btn btn-sm btn-danger"
-            (click)="deleteSupplier(supplier.idSupplier!)"
-          >
-            Excluir
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    <div class="table-responsive">
+      @if (!error) {
+        <table class="table table-hover table-striped table-mobile">
+          <thead class="table-dark">
+            <tr>
+              <th>Documento</th>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Cidade/UF</th>
+              <th>Tipo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (supplier of suppliers$ | async; track supplier) {
+              <tr>
+                <td data-label="Documento">{{ supplier.documentNumber | cpfCnpj }}</td>
+                <td data-label="Nome">{{ supplier.name }}</td>
+                <td data-label="E-mail">{{ supplier.email }}</td>
+                <td data-label="Cidade/UF">{{ supplier.addressCity }}/{{ supplier.addressState }}</td>
+                <td data-label="Tipo">
+                  <span class="badge" [ngClass]="supplier.documentType === 'F' ? 'bg-info' : 'bg-primary'">
+                    {{ supplier.documentType === 'F' ? 'Pessoa Física' : 'Pessoa Jurídica' }}
+                  </span>
+                </td>
+                <td data-label="Ações">
+                  <button
+                    class="btn btn-sm btn-outline-dark  me-2"
+                    [routerLink]="['/suppliers', supplier.idSupplier, 'edit']"
+                    >
+                    <i class="bi bi-pencil me-2" ></i>Editar
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-danger"
+                    (click)="deleteSupplier(supplier.idSupplier!)"
+                    >
+                    <i class="bi bi-trash me-2"></i>Excluir
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
 
-<div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
-  {{ error }}
-  <button type="button" class="btn-close" (click)="error = ''" aria-label="Close"></button>
-</div>
+    @if (error) {
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" (click)="error = ''" aria-label="Close"></button>
+      </div>
+    }

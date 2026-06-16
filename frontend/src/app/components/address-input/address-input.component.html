@@ -17,31 +17,39 @@
             aria-describedby="addressZipCodeError"
             formControlName="addressZipCode"
             appCepMask
-            (blur)="buscarCep()"
+            (blur)="fetchAddressByZipCode()"
             placeholder="00000-000"
-          >
+            >
           <button
             class="btn btn-outline-primary"
             type="button"
-            (click)="buscarCep()"
+            (click)="fetchAddressByZipCode()"
             [disabled]="loadingCep || (form.get('addressZipCode')?.invalid ?? false)"
-          >
-            <span *ngIf="!loadingCep">Buscar</span>
-            <span *ngIf="loadingCep">
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              <span class="visually-hidden">Buscando...</span>
-            </span>
+            >
+            @if (!loadingCep) {
+              <span>Buscar</span>
+            }
+            @if (loadingCep) {
+              <span>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span class="visually-hidden">Buscando...</span>
+              </span>
+            }
           </button>
         </div>
-        <div
-          id="addressZipCodeError"
-          class="invalid-feedback d-block"
-          role="alert"
-          *ngIf="form.get('addressZipCode')?.touched && form.get('addressZipCode')?.errors as errors"
-        >
-          <span *ngIf="errors['notFound']; else cepRequired">CEP não encontrado</span>
-          <ng-template #cepRequired>CEP obrigatório (8 dígitos)</ng-template>
-        </div>
+        @if (form.get('addressZipCode')?.touched && form.get('addressZipCode')?.errors; as errors) {
+          <div
+            id="addressZipCodeError"
+            class="invalid-feedback d-block"
+            role="alert"
+            >
+            @if (errors['notFound']) {
+              <span>CEP não encontrado</span>
+            } @else {
+              CEP obrigatório (8 dígitos)
+            }
+          </div>
+        }
       </div>
 
       <div class="col-md-6 mb-3">
@@ -53,7 +61,7 @@
           class="form-control"
           formControlName="addressStreet"
           placeholder="Rua, Avenida, etc."
-        >
+          >
       </div>
 
       <div class="col-md-3 mb-3">
@@ -65,7 +73,7 @@
           autocomplete="address-line2"
           class="form-control"
           formControlName="addressNumber"
-        >
+          >
       </div>
     </div>
 
@@ -78,7 +86,7 @@
           autocomplete="address-level3"
           class="form-control"
           formControlName="addressNeighborhood"
-        >
+          >
       </div>
 
       <div class="col-md-4 mb-3">
@@ -89,7 +97,7 @@
           autocomplete="address-level2"
           class="form-control"
           formControlName="addressCity"
-        >
+          >
       </div>
 
       <div class="col-md-4 mb-3">
@@ -100,11 +108,13 @@
           class="form-select"
           formControlName="addressState"
           [compareWith]="compareState"
-        >
+          >
           <option value="">Selecione...</option>
-          <option *ngFor="let state of brazilianStates" [value]="state.code">
-            {{ state.code }} - {{ state.name }}
-          </option>
+          @for (state of brazilianStates; track state) {
+            <option [value]="state.code">
+              {{ state.code }} - {{ state.name }}
+            </option>
+          }
         </select>
       </div>
     </div>

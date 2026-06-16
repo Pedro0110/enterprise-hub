@@ -6,47 +6,53 @@
 </div>
 
 <div class="table-responsive">
-  <table class="table table-hover table-striped table-mobile" *ngIf="!error">
-    <thead class="table-dark">
-      <tr>
-        <th>CNPJ</th>
-        <th>Nome Fantasia</th>
-        <th>Cidade/UF</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let company of companies$ | async">
-        <td data-label="CNPJ">{{ company.documentNumber | cpfCnpj }}</td>
-        <td data-label="Nome Fantasia">{{ company.tradeName }}</td>
-        <td data-label="Cidade/UF">{{ company.addressCity }}/{{ company.addressState }}</td>
-        <td data-label="Ações">
-          <button
-            class="btn btn-sm btn-outline-dark me-2"
-            [routerLink]="['/companies', company.idCompany, 'suppliers']"
-          >
-            Fornecedores
-          </button>
-          <button
-            class="btn btn-sm btn-warning me-2"
-            [routerLink]="['/companies', company.idCompany, 'edit']"
-          >
-            Editar
-          </button>
-          <button
-            type="button"
-            class="btn btn-sm btn-danger"
-            (click)="deleteCompany(company.idCompany!)"
-          >
-            Excluir
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  @if (!error) {
+    <table class="table table-hover table-striped table-mobile">
+      <thead class="table-dark">
+        <tr>
+          <th>CNPJ</th>
+          <th>Nome Fantasia</th>
+          <th>Cidade/UF</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (company of companies$ | async; track company) {
+          <tr>
+            <td data-label="CNPJ">{{ company.documentNumber | cpfCnpj }}</td>
+            <td data-label="Nome Fantasia">{{ company.tradeName }}</td>
+            <td data-label="Cidade/UF">{{ company.addressCity }}/{{ company.addressState }}</td>
+            <td data-label="Ações">
+              <button
+                class="btn btn-sm btn-outline-secondary me-2"
+                [routerLink]="['/companies', company.idCompany, 'suppliers']"
+                >
+                <i class="bi bi-box me-2"></i>Fornecedores
+              </button>
+              <button
+                class="btn btn-sm btn-outline-dark me-2"
+                [routerLink]="['/companies', company.idCompany, 'edit']"
+                >
+                <i class="bi bi-pencil me-2" ></i>Editar
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-danger"
+                (click)="deleteCompany(company.idCompany!)"
+                >
+                <i class="bi bi-trash me-2"></i>Excluir
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
 </div>
 
-<div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
-  {{ error }}
-  <button type="button" class="btn-close" (click)="error = ''" aria-label="Close"></button>
-</div>
+@if (error) {
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close" (click)="error = ''" aria-label="Close"></button>
+  </div>
+}

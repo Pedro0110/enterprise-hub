@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { CepService } from '../../services/cep.service';
 import { LoadingService } from '../../services/loading.service';
 import { CepMaskDirective } from '../../shared/directives/cep-mask.directive';
@@ -10,16 +11,17 @@ import { CepMaskDirective } from '../../shared/directives/cep-mask.directive';
   templateUrl: './address-input.component.html',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     CepMaskDirective
   ]
 })
-export class AddressInputComponent {
+export class AddressInputComponent implements OnInit, OnDestroy {
   @Input() form!: FormGroup;
   @Output() addressFilled = new EventEmitter<void>();
 
   loadingCep = false;
+
+  private readonly destroy$ = new Subject<void>();
 
   readonly brazilianStates: { code: string; name: string }[] = [
     { code: 'AC', name: 'Acre' },
@@ -53,10 +55,32 @@ export class AddressInputComponent {
 
   constructor(private cepService: CepService, private loadingService: LoadingService) {}
 
+  ngOnInit(): void {
+    const stateControl = this.form?.get('addressState');
+    if (!stateControl) return;
+
+    // O UF pode chegar de registros já existentes em caixa diferente (o campo
+    // antigo só aplicava uppercase via CSS). Normalizamos para maiúsculas — na
+    // carga inicial e a cada mudança — para que o valor sempre corresponda a
+    // uma opção do select (a API de CEP já retorna o UF em maiúsculas).
+    this.normalizeState(stateControl.value);
+    stateControl.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(value => this.normalizeState(value));
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  /**
+   * Compara o valor do controle com o valor da opção de forma case-insensitive.
+   */
   compareState = (a: string | null, b: string | null): boolean =>
     (a ?? '').toUpperCase() === (b ?? '').toUpperCase();
 
-  buscarCep(): void {
+  fetchAddressByZipCode(): void {
     const cep: string = this.form.get('addressZipCode')?.value;
     if (!cep || this.loadingCep) return;
     const clean = cep.replace(/\D/g, '');
@@ -84,5 +108,13 @@ export class AddressInputComponent {
         this.loadingService.hide();
       }
     });
+  }
+
+  private normalizeState(value: string | null): void {
+    if (typeof value !== 'string') return;
+    const upper = value.toUpperCase();
+    if (upper !== value) {
+      this.form.get('addressState')?.setValue(upper, { emitEvent: false });
+    }
   }
 }

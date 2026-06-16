@@ -19,15 +19,11 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   private handleError(error: HttpErrorResponse): void {
     let message = 'Erro ao processar a requisição';
-
-    // Always log full error to console for debugging
     console.error(`[HTTP Error ${error.status}] ${error.url}`, error);
 
     if (error.status === 400) {
-      // Validação falha
       message = error.error?.message || 'Validação falhou. Verifique os dados informados.';
     } else if (error.status === 404) {
-      // Não encontrado
       if (error.url?.includes('/cep/')) {
         message = 'CEP não encontrado. Verifique o CEP informado.';
       } else if (error.url?.includes('/companies/')) {
@@ -38,7 +34,6 @@ export class ErrorInterceptor implements HttpInterceptor {
         message = 'Recurso não encontrado.';
       }
     } else if (error.status === 409) {
-      // Conflito
       if (error.url?.includes('/companies')) {
         if (error.error?.message?.includes('fornecedores')) {
           message = 'Não é possível deletar a empresa pois possui fornecedores associados.';
@@ -67,7 +62,6 @@ export class ErrorInterceptor implements HttpInterceptor {
     } else if (error.status === 0) {
       message = 'Erro de conectividade. Verifique se o backend está rodando em http://localhost:8080';
     } else if (error.status >= 500) {
-      // Server error - show detailed message if available
       const serverMessage = error.error?.message || error.error?.error || error.statusText;
       message = serverMessage
         ? `Erro no servidor: ${serverMessage}`

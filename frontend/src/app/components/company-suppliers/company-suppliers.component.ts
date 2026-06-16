@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { CompanyService } from '../../services/company.service';
@@ -18,12 +18,11 @@ import { finalize } from 'rxjs/operators';
   templateUrl: './company-suppliers.component.html',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
     CpfCnpjPipe
-  ]
+]
 })
 export class CompanySuppliersComponent implements OnInit {
   company: Company | null = null;

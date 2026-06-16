@@ -1,6 +1,8 @@
-<div class="spinner-overlay" role="status" aria-live="polite" *ngIf="isLoading$ | async">
-  <div class="spinner">
-    <div class="double-bounce1"></div>
-    <div class="double-bounce2"></div>
+@if (isLoading$ | async) {
+  <div class="spinner-overlay" role="status" aria-live="polite">
+    <div class="spinner">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
+    </div>
   </div>
-</div>
+}

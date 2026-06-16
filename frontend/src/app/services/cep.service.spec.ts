@@ -1,52 +1,68 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { CepService } from './cep.service';
-import { environment } from '../../environments/environment';
 
 describe('CepService', () => {
   let service: CepService;
   let httpMock: HttpTestingController;
 
+  const viaCepUrl = (cep: string) => `http://viacep.com.br/ws/${cep}/json/`;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [CepService]
+      providers: [
+        CepService,
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     });
     service = TestBed.inject(CepService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
-  afterEach(() => {
-    httpMock.verify();
-  });
+  afterEach(() => httpMock.verify());
 
-  it('should fetch address from backend', (done) => {
-    const cep = '01001000';
-    const mock = { zipCode: '01001-000', street: 'Praça da Sé', neighborhood: 'Sé', city: 'São Paulo', state: 'SP' };
-
-    service.fetchCep(cep).subscribe(address => {
+  it('fetches and maps a viacep response', (done) => {
+    service.fetchCep('01001000').subscribe(address => {
+      expect(address.zipCode).toBe('01001-000');
       expect(address.street).toBe('Praça da Sé');
+      expect(address.neighborhood).toBe('Sé');
+      expect(address.city).toBe('São Paulo');
+      expect(address.state).toBe('SP');
       done();
     });
 
-    const req = httpMock.expectOne(`${environment.apiBaseUrl}/cep/${cep}`);
+    const req = httpMock.expectOne(viaCepUrl('01001000'));
     expect(req.request.method).toBe('GET');
-    req.flush(mock);
+    req.flush({
+      cep: '01001-000',
+      logradouro: 'Praça da Sé',
+      bairro: 'Sé',
+      localidade: 'São Paulo',
+      uf: 'SP'
+    });
   });
 
-  it('should fallback to cep.la when backend fails', (done) => {
-    const cep = '99999999';
-    const backendUrl = `${environment.apiBaseUrl}/cep/${cep}`;
+  it('strips non-numeric characters from the CEP before requesting', (done) => {
+    service.fetchCep('01001-000').subscribe(() => done());
 
-    service.fetchCep(cep).subscribe(address => {
-      expect(address.city).toBe('CidadeX');
+    const req = httpMock.expectOne(viaCepUrl('01001000'));
+    expect(req.request.url).toBe(viaCepUrl('01001000'));
+    req.flush({ cep: '01001-000', logradouro: '', bairro: '', localidade: '', uf: '' });
+  });
+
+  it('falls back to the cleaned CEP and empty fields when data is missing', (done) => {
+    service.fetchCep('99999999').subscribe(address => {
+      expect(address.zipCode).toBe('99999999');
+      expect(address.street).toBe('');
+      expect(address.neighborhood).toBe('');
+      expect(address.city).toBe('');
+      expect(address.state).toBe('');
       done();
     });
 
-    const req1 = httpMock.expectOne(backendUrl);
-    req1.flush({}, { status: 500, statusText: 'Server Error' });
-
-    const req2 = httpMock.expectOne(`https://cep.la/${cep}`);
-    req2.flush({ cep: cep, street: 'Rua X', neighborhood: 'Bairro X', city: 'CidadeX', state: 'XX' });
+    const req = httpMock.expectOne(viaCepUrl('99999999'));
+    req.flush({});
   });
 });

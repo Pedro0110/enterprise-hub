@@ -8,17 +8,18 @@ import { Toast } from '../../models/toast.model';
   selector: 'app-toast-container',
   template: `
     <div class="toast-container" role="region" aria-label="Notificações">
-      <ngb-alert
-        *ngFor="let toast of (toasts$ | async); trackBy: trackByToastId"
-        [type]="getAlertType(toast.type)"
-        [dismissible]="true"
-        (close)="removeToast(toast.id)"
-        class="toast-alert"
-      >
-        {{ toast.message }}
-      </ngb-alert>
+      @for (toast of (toasts$ | async); track trackByToastId($index, toast)) {
+        <ngb-alert
+          [type]="getAlertType(toast.type)"
+          [dismissible]="true"
+          (close)="removeToast(toast.id)"
+          class="toast-alert"
+          >
+          {{ toast.message }}
+        </ngb-alert>
+      }
     </div>
-  `,
+    `,
   styles: [`
     .toast-container {
       position: fixed;

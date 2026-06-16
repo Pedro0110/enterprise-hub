@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { SupplierService } from '../../services/supplier.service';
@@ -13,13 +13,12 @@ import { CnpjMaskDirective } from '../../shared/directives/cnpj-mask.directive';
   templateUrl: './supplier-form.component.html',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     RouterModule,
     AddressInputComponent,
     CpfMaskDirective,
     CnpjMaskDirective
-  ]
+]
 })
 export class SupplierFormComponent implements OnInit {
   form!: FormGroup;
