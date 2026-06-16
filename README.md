@@ -5,8 +5,6 @@ Sistema full stack desenvolvido com **Angular 21** no frontend e **Java 21 + Spr
 
 ## Tecnologias Utilizadas
 
-## Tecnologias Utilizadas
-
 ### Frontend
 
 - **Angular 21** — Framework para desenvolvimento de aplicações web SPA.
