@@ -95,6 +95,17 @@ no schema após sua criação.
 
 ---
 
+### Modelagem de Empresa, Fornecedor e Endereço
+
+Durante a modelagem, foi considerada a criação de uma entidade base para Empresa e Fornecedor e uma entidade própria
+para Endereço, relacionada às demais tabelas.
+
+No entanto, essa abordagem aumentaria a complexidade da solução com mais entidades e relacionamentos, sem trazer
+benefícios relevantes para os requisitos do projeto. Por esse motivo, foi adotada uma modelagem mais simples e direta,
+priorizando clareza, facilidade de manutenção e entendimento do código.
+
+---
+
 ### Integração e validação de CEP
 
 Um dos requisitos do desafio era:
