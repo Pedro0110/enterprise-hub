@@ -5,21 +5,25 @@ Sistema full stack desenvolvido com **Angular 21** no frontend e **Java 21 + Spr
 
 ## Tecnologias Utilizadas
 
+## Tecnologias Utilizadas
+
 ### Frontend
 
-- Angular 21
-- Bootstrap (estilização)
+- **Angular 21** — Framework para desenvolvimento de aplicações web SPA.
+- **Bootstrap** — Biblioteca CSS para criação de interfaces responsivas.
+- **Jasmine** — Framework utilizado para testes unitários no frontend.
 
 ### Backend
 
-- Java 21
-- Spring Boot 4.1.0
-- Spring Data JPA
-- Hibernate
+- **Java 21** — Linguagem principal da aplicação.
+- **Spring Boot 4.1.0** — Framework para desenvolvimento rápido de aplicações Java.
+- **Spring Data JPA** — Abstração para acesso e persistência de dados.
+- **Hibernate** — Implementação JPA responsável pelo mapeamento objeto-relacional.
+- **JUnit** — Framework para testes automatizados no backend.
 
 ### Banco de Dados
 
-- PostgreSQL
+- **PostgreSQL** — Banco de dados relacional utilizado para armazenamento das informações.
 
 ---
 
